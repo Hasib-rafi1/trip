@@ -4,6 +4,7 @@ import { useState, useEffect,Fragment } from 'react';
 import axios from 'axios'
 
 function App() {
+  {/*url to adopt the host*/}
   const api_url='http://localhost'
   const initialState = {
         start_date:"",
@@ -23,6 +24,7 @@ function App() {
         count_pagi:[],
     }
 
+    {/* bind state wiht return date*/}
     const returnFunc = (e) => {
 
             setdata({
@@ -32,6 +34,8 @@ function App() {
             });
 
     }
+
+    {/* calling api for trip search*/}
     const searchflight=(e)=>{
         e.preventDefault();
         if(data.start_date==="" || data.deperture_from==="" || data.arrival_from==="" ){
@@ -43,6 +47,7 @@ function App() {
 
     }
 
+    {/* reusable call function for trip*/}
     const getTrips=()=>{
       axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&page='+data.page).then((res) => {
           console.log(res)
@@ -68,6 +73,7 @@ function App() {
 
     }
 
+    {/* converting dates to larvel api friendly for timezone check*/}
     const startDate=(e)=>{
       let d = new Date(e.target.value);
       let month = '-' + (d.getMonth() + 1);
@@ -82,7 +88,7 @@ function App() {
       });
 
     }
-
+    {/* converting dates to larvel api friendly for timezone check*/}
     const endDate=(e)=>{
       let d = new Date(e.target.value);
       let month = '-' + (d.getMonth() + 1);

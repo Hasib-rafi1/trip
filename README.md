@@ -34,3 +34,25 @@ A trip MUST depart after creation time at the earliest or 365 days after creatio
 - To run the the project you simply need to run the commmand ./vendor/bin/sail up
 - make sure you are in the root folder. It will provide you the laravel application access.
 - You can chose different ports and configuration make sure you update the docker-compose.yml and .env file
+
+- run composer install , npm install, npm run dev.
+
+
+## Front End is totally indipendent project under trip-app folder.
+
+-node install, npm start, it will  turn on por 3000
+
+## API details
+
+- `/api/airports` Returns all the airport list
+- `/api/airports?code=YVR` Returns all the airport list except the selected one
+- `/api/airlines` Returns all the airlines list
+- `/api/tripbuild?start_date=13-4-2021&retun_date=15-4-2021&deperture_from=YUL&arrival_from=YVR&two_way=true&by_price=true&page=1` Returns the list of possible trips both one and round trip.
+- start_date departure_time
+- retun_date departure_time for round trip
+- deperture_from airport
+- arrival_from airport
+- two_way round trip
+- by_priceprice waise sorting
+- page - pagignation
+- `/api/individual/trip?airline=AC&number=303&twoairline=AC&twonumber=306&two_way=true` for showing the trip Details
