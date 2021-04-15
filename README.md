@@ -38,6 +38,7 @@ A trip MUST depart after creation time at the earliest or 365 days after creatio
 
 ## Front End is totally independent project under trip-app folder.
 
+- It is in the trip-app folder. simple react page
 - make sure you have node install.
 - npm install, npm start, it will  turn on port 3000
 - Also make sure you added the host right in the app.js. 
