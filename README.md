@@ -23,25 +23,29 @@ The following trip types MUST be supported:
 ● A round-trip is a pair of one-ways getting from A to B then from B to A
 A trip MUST depart after creation time at the earliest or 365 days after creation time at the latest.
 ## Technical Requirements
-- Server-side application(s) is written in PHP (Laravel)
+- Server-side application(s) is written in PHP (Laravel) and php-sqlite required
 - CRUD operation for FLIGHT,AIRPORT,AIRLINES are done using laravel and blade
 - Authentication is done with Laravel Breeze
-- To access please use the email: admin@tripbuilder.com and Pass: password
 - Can be used any database, all the migrations file are ready.
 - But for simplicity I am using SQLITE. It is in root folder as a back up as well as in database folder. If you want use with pre define data please copy the root database.sqlite file into the database folder.
 - To run the project you need make sure you have docker install in your computer. just clone the project from the repository https://github.com/Hasib-rafi1/trip.git
-
-- To run the the project you simply need to run the commmand ./vendor/bin/sail up
+- run composer install , npm install, npm run dev.
+- To run the project you simply need to run the command ./vendor/bin/sail up
+- You can avoid the sail command also but to do that make sure you run those 
+- php artisan key:generate
+-  php artisan serve run  it will run server the 
+-  you can run it in 80 port too. by running the command
+-  php artisan serve --port=80
 - make sure you are in the root folder. It will provide you the laravel application access.
 - You can chose different ports and configuration make sure you update the docker-compose.yml and .env file
+- To access please use the email: admin@tripbuilder.com and Pass: password
 
-- run composer install , npm install, npm run dev.
+## Front End is totally independent project under trip-app folder.
 
-
-## Front End is totally indipendent project under trip-app folder.
-
-- node install, npm start, it will  turn on port 3000
-- need to change the hos address in the app.js file URL
+- It is in the trip-app folder. simple react page
+- make sure you have node install.
+- npm install, npm start, it will  turn on port 3000
+- Also make sure you added the host right in the app.js. 
 
 ## API details
 
