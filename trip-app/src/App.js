@@ -122,7 +122,7 @@ function App() {
                page: key,
 
             });
-            axios.get(api_url+'api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&page='+key).then((res) => {
+            axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&page='+key).then((res) => {
                 console.log(res)
                 setdata({
                     ...data,
@@ -139,7 +139,7 @@ function App() {
     }
     const getAirport = (e) => {
         // e.target.value
-        axios.get(api_url+'api/airports?code='+e.target.value).then((res) => {
+        axios.get(api_url+'/api/airports?code='+e.target.value).then((res) => {
             console.log(res)
             setdata({
                 ...data,
