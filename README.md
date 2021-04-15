@@ -29,11 +29,10 @@ A trip MUST depart after creation time at the earliest or 365 days after creatio
 - Can be used any database, all the migrations file are ready.
 - But for simplicity I am using SQLITE. It is in root folder as a back up as well as in database folder. If you want use with pre define data please copy the root database.sqlite file into the database folder.
 - To run the project you need make sure you have docker install in your computer. just clone the project from the repository https://github.com/Hasib-rafi1/trip.git
-
+- run composer install , npm install, npm run dev.
 - To run the project you simply need to run the command ./vendor/bin/sail up
 - make sure you are in the root folder. It will provide you the laravel application access.
 - You can chose different ports and configuration make sure you update the docker-compose.yml and .env file
-- run composer install , npm install, npm run dev.
 - To access please use the email: admin@tripbuilder.com and Pass: password
 
 ## Front End is totally independent project under trip-app folder.
