@@ -13,7 +13,7 @@
 
         <link href="{{ asset('examples/carousel/carousel.css') }}" rel="stylesheet">
 
-        !-- Font-Awesome -->
+        <!-- Font-Awesome -->
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/font-awesome.css') }}" media="screen" />
         <!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="{{ asset('assets/css/font-awesome-ie7.css') }}" media="screen" /><![endif]-->
 

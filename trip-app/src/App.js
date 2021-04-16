@@ -73,12 +73,18 @@ function App() {
     const getTrips=()=>{
       axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&filter='+data.filtter.replace(',','_')+'&page='+data.page).then((res) => {
           console.log(res)
+          let temporary_data = []
+          if(Array.isArray(res.data.data)){
+            temporary_data = res.data.data;
+          }else {
+            temporary_data = Object.values(res.data.data)
+          }
           const count_paginumber = []
           for (let i = 1; i <= res.data.links.length-2; i++) {
             count_paginumber.push(i);}
           setdata({
               ...data,
-             trips: res.data.data,
+             trips: temporary_data,
              curent_pagi: res.current_page,
              count_pagi: count_paginumber,
               // [e.target.name+'HelperText']: '',
@@ -304,7 +310,8 @@ function App() {
           <div className="itemscontainer offset-1">
           <div className="clearfix"></div>
           <br></br>
-          {console.log(data.trips)}
+          {console.log(data.trips.length)}
+          <h2 hidden={data.trips.length==0? false: true}>No Flight to Show</h2>
           {data.trips.map((trip) =>
             <Fragment key={trip.index}>
           <div className="offset-2">
@@ -316,7 +323,7 @@ function App() {
                 <h4>Departure Flight Details</h4>
                 <b>Flight Number:</b> {trip.one.airline}{trip.one.number}<br></br>
                 <b>Airport:</b> {trip.one.departure_airport}<br></br>
-                <b>Departure Time:</b> {trip.one.departure_time}<br></br>
+                <b>Departure Time:</b>{data.start_date} {trip.one.departure_time}<br></br>
                 <b>Arrival Airport:</b> {trip.one.arrival_airport}<br></br>
                 <b>Arrival Time:</b> {trip.one.arrival_time}<br></br>
                 <b>Price:</b> {trip.one.price}<br></br>
@@ -326,7 +333,7 @@ function App() {
                 <p hidden={!data.two_way}>
                 <b>Flight Number:</b> {data.two_way === true?  trip.two.airline + trip.two.number  : ' '}<br></br>
                 <b>Airport:</b> {data.two_way === true?  trip.two.departure_airport  : ' '}<br></br>
-                <b>Departure Time:</b> {data.two_way === true?  trip.two.departure_time  : ' '}<br></br>
+                <b>Departure Time:</b> {data.two_way === true? data.retun_date+''+trip.two.departure_time  : ' '}<br></br>
                 <b>Arrival Airport:</b> {data.two_way === true?  trip.two.arrival_airport  : ' '}<br></br>
                 <b >Arrival Time:</b> {data.two_way === true?  trip.two.arrival_time  : ' '}<br></br>
                 <b>Price:</b> {data.two_way === true?  trip.two.price  : ' '}</p>
@@ -342,7 +349,7 @@ function App() {
       <div className="clearfix"></div>
       <br></br><hr></hr>
       </Fragment>)}
-      <div className="hpadding20">
+      <div hidden={data.trips.length==0? true: false} className="hpadding20">
 
         <ul className="pagination right paddingbtm20">
 

@@ -4,18 +4,18 @@ Outline
 An airline has a name and is identified by a IATA Airline Code.
 Ex: Air Canada (AC)
 An airport is a location identified by a IATA Airport Code. It also has a name, a city, latitude and
-longitude coordinates, a timezone and a city code, the IATA Airport Code for a city, which may
+longitude coordinates, a time zone and a city code, the IATA Airport Code for a city, which may
 differ from an airport code in larger areas.
 Ex: Pierre Elliott Trudeau International (YUL) belongs to the Montreal (YMQ) city code.
 A flight is uniquely numbered for a referenced airline. For the sake of simplicity, a flight is priced
 for a single passenger (any gender, any type) in a neutral currency and is available every day of
 the week. It references a pair of airports for departure and arrival. It has departure and arrival
-times in the corresponding airport timezones.
+times in the corresponding airport time zones.
 Ex: AC301 from YUL to YVR departs at 7:35 AM (Montreal) and arrives at 10:05 AM (Vancouver).
 
 Mission
 Create Web Services to build and navigate trips for a single passenger using criteria such as
-departure locations, departure dates and arrival locations. Be mindful of timezones!
+departure locations, departure dates and arrival locations. Be mindful of time zones!
 A trip references one or many flights with dates of departure. The price amounts to the total of
 the price of the referenced flights.
 The following trip types MUST be supported:
@@ -29,11 +29,11 @@ A trip MUST depart after creation time at the earliest or 365 days after creatio
 - Can be used any database, all the migrations file are ready.
 - But for simplicity I am using SQLITE. It is in root folder as a back up as well as in database folder. If you want use with pre define data please copy the root database.sqlite file into the database folder.
 - To run the project you need make sure you have docker install in your computer. just clone the project from the repository https://github.com/Hasib-rafi1/trip.git
-- run composer install , npm install, npm run dev.
+- run composer update , npm install, npm run dev.
 - To run the project you simply need to run the command ./vendor/bin/sail up
-- You can avoid the sail command also but to do that make sure you run those 
+- You can avoid the sail command also but to do that make sure you run those
 - php artisan key:generate
--  php artisan serve run  it will run server the 
+-  php artisan serve run  it will run server the
 -  you can run it in 80 port too. by running the command
 -  php artisan serve --port=80
 - make sure you are in the root folder. It will provide you the laravel application access.
@@ -45,7 +45,7 @@ A trip MUST depart after creation time at the earliest or 365 days after creatio
 - It is in the trip-app folder. simple react page
 - make sure you have node install.
 - npm install, npm start, it will  turn on port 3000
-- Also make sure you added the host right in the app.js. 
+- Also make sure you added the host right in the app.js.
 
 ## API details
 
@@ -61,3 +61,8 @@ A trip MUST depart after creation time at the earliest or 365 days after creatio
 - by_priceprice waise sorting
 - page - pagignation
 - `/api/individual/trip?airline=AC&number=303&twoairline=AC&twonumber=306&two_way=true` for showing the trip Details
+
+
+## Test details
+- you can run to check the test
+- php artisan test
