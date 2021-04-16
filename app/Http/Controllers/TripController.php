@@ -14,6 +14,15 @@ class TripController extends Controller
 {
     /**
      * Building tour to show in the front
+     * Reference One in outboud flight info and two is inbound flight info if the trip is round
+     * fetching roundway data
+     * merging based on the conditions date timezone, and providing a new data structure for trip.
+     * if the trip is round way but but there is no inbound flight it shows the inbound flights
+     * for each round trip it matches the time zone. if it is possible on or not. and execute in that way.
+     * It will gives an error if the client choese arrival day before the departure day
+     * it returns the all matching if hte day is different
+     * one way trip option
+     *
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
@@ -35,6 +44,7 @@ class TripController extends Controller
             //merging based on the conditions date timezone, and providing a new data structure for trip.
             foreach ($one_ways as $one_way){
                 if($response['two_way']== 'true'){
+                    // if the trip is round way but but there is no inbound flight it shows the inbound flights
                     if($round_way==NULL){
                         $trip[$count]['one']=$one_way;
                         $trip[$count]['round']=$response['two_way'];
@@ -43,6 +53,7 @@ class TripController extends Controller
                         $count++;
                     }else{
                         foreach ($round_way as $way){
+                            //for each round trip it matches the time zone. if it is possible on or not. and exicute in that way.
                             if(new \DateTime($response['start_date'])!=new \DateTime($response['retun_date']) &&
                             new \DateTime($response['start_date']) < new \DateTime($response['retun_date'])
                             ){
@@ -52,9 +63,11 @@ class TripController extends Controller
                                 $trip[$count]['total']=$one_way->price + $way->price;
                                 $count++;
                             }elseif(new \DateTime($response['start_date']) > new \DateTime($response['retun_date'])){
+                                // It will gives an error if the client choese arrival day before the departure day
                                 return response()->json(["message"=>"Check the dates"],404);
                             }
                             else{
+                                // it returns the all matching if hte day is different
                                 $timezone_to = DB::table('airports')->where('code',  $response['arrival_from'])->value('timezone');
                                 $date = new \DateTime($response['retun_date'].' '.$way->departure_time, new \DateTimeZone($timezone_to));
                                 $date->setTimezone(new \DateTimeZone('UTC'));

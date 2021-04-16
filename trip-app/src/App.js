@@ -22,6 +22,8 @@ function App() {
         flag:true,
         curent_pagi:"",
         count_pagi:[],
+        filtter_air:[],
+        filtter:"",
     }
 
     {/* bind state wiht return date*/}
@@ -32,6 +34,26 @@ function App() {
                two_way: e.target.checked
 
             });
+
+    }
+
+    {/* deny the airlines */}
+    const deny = (e) => {
+            if(e.target.checked){
+              data.filtter_air.push(e.target.value)
+            }else{
+              const index = data.filtter_air.indexOf(e.target.value);
+              if (index > -1) {
+                data.filtter_air.splice(index, 1);
+              }
+            }
+            let filter = data.filtter_air.join()
+            setdata({
+                ...data,
+               filtter_air: data.filtter_air,
+               filtter: filter
+            });
+
 
     }
 
@@ -49,13 +71,16 @@ function App() {
 
     {/* reusable call function for trip*/}
     const getTrips=()=>{
-      axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&page='+data.page).then((res) => {
+      axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&filter='+data.filtter.replace(',','_')+'&page='+data.page).then((res) => {
           console.log(res)
+          const count_paginumber = []
+          for (let i = 1; i <= res.data.links.length-2; i++) {
+            count_paginumber.push(i);}
           setdata({
               ...data,
              trips: res.data.data,
              curent_pagi: res.current_page,
-             count_pagi: res.data.links,
+             count_pagi: count_paginumber,
               // [e.target.name+'HelperText']: '',
               // [e.target.name+'Error']: false,
           });
@@ -118,23 +143,37 @@ function App() {
             key = parseInt(key)
             console.log(key);
             setdata({
-                ...data,
-               page: key,
+                    ...data,
+                   trips:[],
+                   page:key,
+                    // [e.target.name+'HelperText']: '',
+                    // [e.target.name+'Error']: false,
+                });
 
-            });
-            axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&page='+key).then((res) => {
+            axios.get(api_url+'/api/tripbuild?start_date='+data.start_date+'&retun_date='+data.retun_date+'&deperture_from='+data.deperture_from+'&arrival_from='+data.arrival_from+'&two_way='+data.two_way+'&by_price='+data.by_price+'&filter='+data.filtter.replace(',','_')+'&page='+key)
+            .then((res) => {
                 console.log(res)
+                let temporary_data = []
+                if(Array.isArray(res.data.data)){
+                  temporary_data = res.data.data;
+                }else {
+                  temporary_data = Object.values(res.data.data)
+                }
+                const count_paginumber = []
+                for (let i = 1; i <= res.data.links.length-2; i++) {
+                  count_paginumber.push(i);}
                 setdata({
                     ...data,
-                   trips: res.data.data,
-                   curent_pagi: res.current_page,
-                   count_pagi: res.data.links,
+                   trips: temporary_data,
+                   curent_pagi: res.data.current_page,
+                   count_pagi: count_paginumber,
+                   page: key,
                     // [e.target.name+'HelperText']: '',
                     // [e.target.name+'Error']: false,
                 });
             }).catch((err) => {
-                console.log(err.response)
-                alert(err.response.data.message)
+                console.log(err)
+                //alert(err.response.data.message)
             });
     }
     const getAirport = (e) => {
@@ -238,11 +277,11 @@ function App() {
       </div>
       <div id="collapse4" className="collapse in">
         {data.airlines.map((airline) =>
-          <Fragment key={airline.code}>
+          <Fragment key={airline.code} >
             <div className="hpadding20">
               <div className="checkbox">
                 <label>
-                  <input name={airline.code} value={airline.code} type="checkbox" checked/>{airline.name}
+                  <input name={airline.code} value={airline.code} onChange={deny} type="checkbox" />{airline.name}
                 </label>
               </div>
             </div>
@@ -265,35 +304,36 @@ function App() {
           <div className="itemscontainer offset-1">
           <div className="clearfix"></div>
           <br></br>
-
+          {console.log(data.trips)}
           {data.trips.map((trip) =>
             <Fragment key={trip.index}>
           <div className="offset-2">
 
             <div className="col-md-12 offset-0">
 
-              <div className="itemlabel3">
-              <h4>Departure Flight Details</h4>
-              <b>Flight Number:</b> {trip.one.airline}{trip.one.number}
-              <b>Airport:</b> {trip.one.departure_airport}
-              <b>Departure Time:</b> {trip.one.departure_time}
-              <b>Arrival Airport:</b> {trip.one.arrival_airport}
-              <b>Arrival Time:</b> {trip.one.arrival_time}
-              <b>Price:</b> {trip.one.price}
-
-              <h4 hidden={!trip.round}>Arrival Flight Details</h4>
-              <p hidden={!trip.round}>
-              <b >Flight Number:</b> {trip.round == true?  trip.two.airline + trip.two.number  : ' '}
-              <b>Airport:</b> {trip.round == true?  trip.two.departure_airport  : ' '}
-              <b>Departure Time:</b> {trip.round == true?  trip.two.departure_time  : ' '}
-              <b>Arrival Airport:</b> {trip.round == true?  trip.two.arrival_airport  : ' '}
-              <b>Arrival Time:</b> {trip.round == true?  trip.two.arrival_time  : ' '}
-              <b>Price:</b> {trip.round == true?  trip.two.price  : ' '}</p>
+              <div className="row itemlabel3">
+              <div className="col-md-4 offset-0">
+                <h4>Departure Flight Details</h4>
+                <b>Flight Number:</b> {trip.one.airline}{trip.one.number}<br></br>
+                <b>Airport:</b> {trip.one.departure_airport}<br></br>
+                <b>Departure Time:</b> {trip.one.departure_time}<br></br>
+                <b>Arrival Airport:</b> {trip.one.arrival_airport}<br></br>
+                <b>Arrival Time:</b> {trip.one.arrival_time}<br></br>
+                <b>Price:</b> {trip.one.price}<br></br>
+              </div>
+              <div className="col-md-4 offset-0">
+                <h4 hidden={!data.two_way}>Arrival Flight Details</h4>
+                <p hidden={!data.two_way}>
+                <b>Flight Number:</b> {data.two_way === true?  trip.two.airline + trip.two.number  : ' '}<br></br>
+                <b>Airport:</b> {data.two_way === true?  trip.two.departure_airport  : ' '}<br></br>
+                <b>Departure Time:</b> {data.two_way === true?  trip.two.departure_time  : ' '}<br></br>
+                <b>Arrival Airport:</b> {data.two_way === true?  trip.two.arrival_airport  : ' '}<br></br>
+                <b >Arrival Time:</b> {data.two_way === true?  trip.two.arrival_time  : ' '}<br></br>
+                <b>Price:</b> {data.two_way === true?  trip.two.price  : ' '}</p>
+              </div>
                 <div className="labelright">
-
+                  <p hidden={!(data.filtter_air.indexOf(trip.one.airline) > -1)}>Your Choiced Airlines</p>
                   <span className="green size18"><b>{trip.total}</b></span><br/>
-
-                   <button className="bookbtn mt1" type="submit">Details</button>
 
                 </div>
             </div>
@@ -305,9 +345,10 @@ function App() {
       <div className="hpadding20">
 
         <ul className="pagination right paddingbtm20">
+
           {data.count_pagi.map((pagi,index) =>
 
-          <li hidden={index!=0} key={index}><b data-key={index} onClick={pagina}>{index}</b></li>)}
+          <li key={pagi}><a data-key={pagi} onClick={pagina}>{pagi}</a></li>)}
         </ul>
 
       </div>
